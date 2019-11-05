@@ -30,6 +30,12 @@ class StockListSpider(scrapy.Spider):
         start_urls.append(
             "https://xueqiu.com/stock/forchartk/stocklist.json?symbol={}&period=1day&type=before&begin={}&end={}&_={}".format(
                 "SZ300002", beginTs, endTs, endTs))
+        '''
+        SZ399006 
+        
+        SZ399001
+        SH000001 
+        '''
 
         for url in start_urls:
             yield scrapy.Request(url=url, headers=headers, cookies=cookies, callback=self.parse)

@@ -24,9 +24,13 @@ class StockListSpider(scrapy.Spider):
         endTs = int(round(time.time() * 1000))
         beginTs = endTs - 1000 * 3600 * 24 * 100
 
-        with open("stock_list.log") as f:
-            for line in f.readlines():
-                start_urls.append("https://xueqiu.com/stock/forchartk/stocklist.json?symbol={}&period=1day&type=before&begin={}&end={}&_={}".format(line, beginTs, endTs, endTs))
+        # with open("stock_list.log") as f:
+        #     for line in f.readlines():
+        #         start_urls.append("https://xueqiu.com/stock/forchartk/stocklist.json?symbol={}&period=1day&type=before&begin={}&end={}&_={}".format(line, beginTs, endTs, endTs))
+        start_urls.append(
+            "https://xueqiu.com/stock/forchartk/stocklist.json?symbol={}&period=1day&type=before&begin={}&end={}&_={}".format(
+                "SZ300002", beginTs, endTs, endTs))
+
         for url in start_urls:
             yield scrapy.Request(url=url, headers=headers, cookies=cookies, callback=self.parse)
 

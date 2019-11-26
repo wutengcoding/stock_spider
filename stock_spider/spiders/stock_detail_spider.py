@@ -1,6 +1,7 @@
 import scrapy
 import time
 import json
+from db_utils import *
 
 
 class StockListSpider(scrapy.Spider):
@@ -14,22 +15,27 @@ class StockListSpider(scrapy.Spider):
         }
 
         cookies = {
-            'xq_a_token':'84f0424d3a6b572dacb4b96523ba04f140b1f254'
+            'xq_a_token':'f225dc6f48faedd78b6fd2ce39b645eb69a49278'
         }
 
         start_urls = []
 
-        # beginTs = "1478620800000"
-        # endTs = "1510126200000"
+        # endTs = int(round(time.time() * 1000)) - 1000 * 3600 * 24 * 1
+        # beginTs = endTs - 1000 * 3600 * 24 * 100
+
         endTs = int(round(time.time() * 1000))
-        beginTs = endTs - 1000 * 3600 * 24 * 100
+        beginTs = endTs - 1000 * 3600 * 24 * 79
+        print(beginTs, endTs)
 
         # with open("stock_list.log") as f:
         #     for line in f.readlines():
         #         start_urls.append("https://xueqiu.com/stock/forchartk/stocklist.json?symbol={}&period=1day&type=before&begin={}&end={}&_={}".format(line, beginTs, endTs, endTs))
-        start_urls.append(
-            "https://xueqiu.com/stock/forchartk/stocklist.json?symbol={}&period=1day&type=before&begin={}&end={}&_={}".format(
-                "SZ300002", beginTs, endTs, endTs))
+
+        stock_id_list = query_all_stockid()
+        print('The query urls limit 10 is ', stock_id_list[:10])
+        for line in stock_id_list[:2]:
+            start_urls.append("https://xueqiu.com/stock/forchartk/stocklist.json?symbol={}&period=1day&type=before&begin={}&end={}&_={}".format(line, beginTs, endTs, endTs))
+
         '''
         SZ399006 
         
@@ -42,6 +48,11 @@ class StockListSpider(scrapy.Spider):
 
     def parse(self, response):
         resp = json.loads(response.body)
-        with open("data/" + resp['stock']['symbol'], 'wb') as f:
-            f.write(response.body)
+        data = {'stock_id': resp['stock']['symbol'], 'chartlist': resp['chartlist']}
+        insert_tail_data(data)
+        # insert_single_detail(data)
+        # print(data)
+
+        # with open("data/" + resp['stock']['symbol'], 'wb') as f:
+        #     print(response.body)
 

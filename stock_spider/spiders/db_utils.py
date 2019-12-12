@@ -15,21 +15,10 @@ def insert_single_detail(data):
     mydb[TABLE_NAME].insert_one(data)
 
 def insert_tail_data(data):
-    print("Appending the last day data", len(data['chartlist']))
-    mytable = mydb[TABLE_NAME]
+    print("Appending the last day data", len(data['chartlist']), 'end date is ', data['chartlist'][-1])
     stock_query = {'stock_id': data['stock_id']}
-
-    queryed_data = mytable.find(stock_query)[0]
-    old_chartlist = queryed_data['chartlist']
-    print('before, ', len(old_chartlist))
-
-    old_chartlist.append(data['chartlist'])
-
-    # print('after ', len(old_chartlist), old_chartlist[0])
-
-    newvalues = {"$set": {"chartlist": old_chartlist}}
-
-    # mydb[TABLE_NAME].update_one(stock_query, newvalues)
+    newvalues = {"$set": {"chartlist": data['chartlist']}}
+    mydb[TABLE_NAME].update_one(stock_query, newvalues)
 
 def query_all_stockid():
     res = []

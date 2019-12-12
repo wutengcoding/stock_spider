@@ -1,6 +1,7 @@
 import scrapy
 import time
 import json
+import datetime
 from db_utils import *
 
 
@@ -20,12 +21,12 @@ class StockListSpider(scrapy.Spider):
 
         start_urls = []
 
-        # endTs = int(round(time.time() * 1000)) - 1000 * 3600 * 24 * 1
-        # beginTs = endTs - 1000 * 3600 * 24 * 100
-
         endTs = int(round(time.time() * 1000))
-        beginTs = endTs - 1000 * 3600 * 24 * 79
-        print(beginTs, endTs)
+        beginTs = endTs - 1000 * 3600 * 24 * 200
+
+        today = datetime.datetime.now().strftime("%Y%m%d")
+        daysAgo = (datetime.datetime.now() - datetime.timedelta(days=120)).strftime("%Y%m%d")
+
 
         # with open("stock_list.log") as f:
         #     for line in f.readlines():
@@ -34,7 +35,10 @@ class StockListSpider(scrapy.Spider):
         stock_id_list = query_all_stockid()
         print('The query urls limit 10 is ', stock_id_list[:10])
         for line in stock_id_list[:2]:
-            start_urls.append("https://xueqiu.com/stock/forchartk/stocklist.json?symbol={}&period=1day&type=before&begin={}&end={}&_={}".format(line, beginTs, endTs, endTs))
+            stock_code = '0' + line[2:]
+            start_urls.append("http://quotes.money.163.com/service/chddata.html?code={}&start={}&end={}&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;TURNOVER;VOTURNOVER;VATURNOVER;TCAP;MCAP"
+                              .format(stock_code, daysAgo, today))
+            # start_urls.append("https://xueqiu.com/stock/forchartk/stocklist.json?symbol={}&period=1day&type=before&begin={}&end={}&_={}".format(line, beginTs, endTs, endTs))
 
         '''
         SZ399006 
@@ -47,9 +51,9 @@ class StockListSpider(scrapy.Spider):
             yield scrapy.Request(url=url, headers=headers, cookies=cookies, callback=self.parse)
 
     def parse(self, response):
-        resp = json.loads(response.body)
-        data = {'stock_id': resp['stock']['symbol'], 'chartlist': resp['chartlist']}
-        insert_tail_data(data)
+        pass
+        # resp = json.loads(response.body)
+        # insert_tail_data(data)
         # insert_single_detail(data)
         # print(data)
 

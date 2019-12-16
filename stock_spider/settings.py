@@ -86,9 +86,14 @@ COOKIES_ENABLED = True
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'stock_spider.pipelines.StockSpiderPipeline': 300,
-#}
+ROBOTSTXT_OBEY =False
+
+ITEM_PIPELINES = {
+   # 'scrapy.pipelines.files.FilesPipeline': 1,
+   'stock_spider.pipelines.MyFilePipeline': 1,
+   'stock_spider.pipelines.MongoPipeline': 2
+}
+FILES_STORE = 'D:\stock_history'
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
@@ -110,3 +115,5 @@ COOKIES_ENABLED = True
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+

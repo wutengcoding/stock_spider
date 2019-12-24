@@ -20,8 +20,8 @@ NEWSPIDER_MODULE = 'stock_spider.spiders'
 
 
 # #中间件中的UserAgent池
-# USER_AGENTS = [
-#         'User-Agent:Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_8; en-us) AppleWebKit/534.50 (KHTML, like Gecko) Version/5.1 Safari/534.50',
+USER_AGENTS = [
+    'User-Agent:Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_8; en-us) AppleWebKit/534.50 (KHTML, like Gecko) Version/5.1 Safari/534.50',
 #         'User-Agent:Mozilla/5.0 (Windows; U; Windows NT 6.1; en-us) AppleWebKit/534.50 (KHTML, like Gecko) Version/5.1 Safari/534.50',
 #         'User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101 Firefox/38.0',
 #         'User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; .NET4.0C; .NET4.0E; .NET CLR 2.0.50727; .NET CLR 3.0.30729; .NET CLR 3.5.30729; InfoPath.3; rv:11.0) like Gecko',
@@ -31,7 +31,7 @@ NEWSPIDER_MODULE = 'stock_spider.spiders'
 #         'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36',
 #         'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11',
 #         'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/534.16 (KHTML, like Gecko) Chrome/10.0.648.133 Safari/534.16',
-# ]
+]
 # #中间件中的Proxy池
 # PROXIES = [
 #         {'ip_port':'121.42.140.113:16816','user_password':'username-xxxx:password-xxxx'},
@@ -75,7 +75,7 @@ COOKIES_ENABLED = True
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
-#    'stock_spider.middlewares.StockSpiderDownloaderMiddleware': 543,
+#    'stock_spider.middlewares.StockSpiderDownloaderMiddleware': 543
 #}
 
 # Enable or disable extensions
@@ -89,11 +89,11 @@ COOKIES_ENABLED = True
 ROBOTSTXT_OBEY =False
 
 ITEM_PIPELINES = {
-   # 'scrapy.pipelines.files.FilesPipeline': 1,
    'stock_spider.pipelines.MyFilePipeline': 1,
    'stock_spider.pipelines.MongoPipeline': 2
 }
-FILES_STORE = 'D:\stock_history'
+#FILES_STORE = 'D:\stock_history'
+FILES_STORE = 'data'
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html

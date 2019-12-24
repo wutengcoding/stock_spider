@@ -8,7 +8,7 @@ from scrapy.pipelines.files import FilesPipeline
 from urllib.parse import urlparse, parse_qs
 import pandas as pd
 import json
-import pymongo
+#import pymongo
 
 
 
@@ -22,12 +22,17 @@ class MyFilePipeline(FilesPipeline):
 
 class MongoPipeline(object):
 
-    myclient = pymongo.MongoClient("mongodb://localhost:27017/")
-    mydb = myclient["stock_spider"]
+    #myclient = pymongo.MongoClient("mongodb://localhost:27017/")
+    #mydb = myclient["stock_spider"]
 
     def process_item(self, item, spider):
-        filepath = spider.settings.get('FILES_STORE') +"\\" + item['files'][0]['path']
+        filepath = spider.settings.get('FILES_STORE') +"/" + item['files'][0]['path']
         filename = item['files'][0]['path'].split(".")[0]
-        data = pd.read_csv(filepath, encoding="gbk")
-        data_json = json.loads(data.to_json(orient="records"))
-        self.mydb[filename].insert_many(data_json)
+        df = pd.read_csv(filepath, encoding="gbk")
+        #data_json = json.loads(data.to_json(orient="records"))
+        head_name= "DATE;CLOSE;HIGH;LOW;OPEN;LCLOSE;CHG;PCHG;TURNOVER;VOLUME;VATURNOVER;TCAP;MCAP".lower().split(";")
+        trim_df = df.drop(columns=['股票代码', '名称'])
+        trim_df.to_csv(spider.settings.get('FILES_STORE') + "/../csv_dir/" + filename + ".csv", encoding='utf-8', header=head_name, index=False)
+        print (trim_df.head())
+        #print(data_json)
+        #self.mydb[filename].insert_many(data_json)
